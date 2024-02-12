@@ -49,7 +49,9 @@ socket_plug_height=5.5;
 
 module socket(){
 	difference(){
-		translate([0.7, -4.5, -(socket_height+1.2)]){
+		translate_y=-4.5;
+		translate_x=0.7;
+		translate([translate_x, translate_y, -(socket_height+1.2)]){
 			cube(size=[socket_length, socket_width_1, socket_height], center=true);
 			translate([socket_length/2-2.5,socket_width_2/2,0])
 			cube(size=[5, socket_width_2, socket_height], center=true);
@@ -58,6 +60,17 @@ module socket(){
 			translate([(socket_length+2)/2,(socket_width_2+0.7)/2,0])
 			cube([4,1.6,socket_height],center=true);
 
+			// wire rails
+			rail_depth=3;
+			// columns
+			translate([-7,-translate_y,0])
+			#cube([1.3,20,rail_depth], center=true);
+			// rows 
+			translate([-translate_x,9,0])
+			#cube([20,1.3,rail_depth], center=true);
+			translate([7,4,0])
+			#cube([1.3,11,rail_depth], center=true);
+
 			$fn=30;
 			translate([-socket_length/2+0.7+1.65,-0.35,2.1])
 			cylinder(h=6, r=1.65, center=true);
@@ -65,7 +78,7 @@ module socket(){
 			cylinder(h=6, r=1.65, center=true);
 			// swtich_stub
 			translate([-0.7,4.7,2.1])
-			cylinder(h=6, r=2.3, center=true);
+			cylinder(h=8, r=2.3, center=true);
 		}
 		$fn=100;
 		translate([0,-6.75,-(socket_plug_height-0.25)])
@@ -85,8 +98,8 @@ for(j=[0,1])
 			cube(size=[20, 20, 9.5+transl], center=true);
 			socket();
 			switch();
-			translate([-6.5,0,-4])
-			#cube([1.5,20,4], center=true);
+			//translate([-6.5,0,-4])
+			//cube([1.3,20,4], center=true);
 		}
 	}
 }
