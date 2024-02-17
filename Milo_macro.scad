@@ -14,6 +14,8 @@ fa_render=12;
 $fn=fn_render;
 $fa=fa_render;
 $fs=fs_render;
+/*
+*/
 
 switch_spacing=6.2;
 switch_width=13.8;
@@ -50,7 +52,7 @@ module socket(){
 			rail_depth=3;
 			// columns
 			translate([-7,-translate_y,0])
-			cube([1.3,20,rail_depth], center=true);
+			cube([1.3,40,rail_depth], center=true);
 			// rows 
 			translate([-translate_x,9,0])
 			cube([21,1.3,rail_depth], center=true);
@@ -65,8 +67,6 @@ module socket(){
 					translate([1,0,0])
 					cube([0.5,2.5,5.5], center=true);
 				}
-			if(preview_enabled){$fn=fn_preview;$fa=fa_preview;$fs=fs_preview;}
-			else{$fn=fn_render;$fa=fa_render;$fs=fs_render;}
 			translate([-socket_length/2+0.7+1.65,-0.35,2.1])
 			cylinder(h=6, r=1.65, center=true);
 			translate([socket_length/2-0.8-1.55,2.3,2.1])
@@ -78,8 +78,6 @@ module socket(){
 			translate([0,0.7,0.15])
 			cylinder(h=2.5, r=2.3, center=true);
 		}
-		if(preview_enabled){$fn=fn_preview;$fa=fa_preview;$fs=fs_preview;}
-		else{$fn=fn_render;$fa=fa_render;$fs=fs_render;}
 		translate([0,-6.75,-(socket_plug_height-0.25)])
 		scale([2,1,1])
 		sphere(0.75);
@@ -112,10 +110,10 @@ module top_clip(){
 }
 
 
-chassis_x=110;
-chassis_y=110;
-chassis_translate_x=0;
-chassis_translate_y=0;
+chassis_x=50;
+chassis_y=50;
+chassis_translate_x=6;
+chassis_translate_y=1;
 rounding=4;
 
 base_thickness=14;
@@ -136,17 +134,17 @@ difference(){
 		translate([chassis_translate_x,chassis_translate_y,1.2])
 			//cube([chassis_x,chassis_y,5], center=true);
 			rounded_cube([chassis_x,chassis_y,5], rounding);
-		translate([-(chassis_translate_x + chassis_x/2), chassis_translate_y - chassis_y/4, -0.1 ]){
+		translate([(chassis_translate_x - chassis_x/2), chassis_translate_y - chassis_y/4, -0.1 ]){
 			top_clip();
 		}
-		translate([-(chassis_translate_x + chassis_x/2), chassis_translate_y + chassis_y/4, -0.1 ]){
+		translate([(chassis_translate_x - chassis_x/2), chassis_translate_y + chassis_y/4, -0.1 ]){
 			top_clip();
 		}
 	}
 	if (0<=render_swap){
 		// switch and socket placement to be cut out from top 2 chassis models
-			for(j=[-2:2]){
-				for(i=[-2:2]){
+			for(j=[-0.5:0.5]){
+				for(i=[-0.5:0.5]){
 					translate ([i*20+5*cos(20*PI*j),j*20,0]){
 					rotate([0,0,90]){
 						socket();
@@ -173,18 +171,18 @@ difference(){
 		// size of both switch_plate, and socket_plate + 0.5mm tolerance
 		translate([chassis_translate_x, chassis_translate_y, -0.1 ])
 			rounded_cube([chassis_x + 0.5, chassis_y + 0.5, 9.51], rounding);
-		translate([-(chassis_translate_x + chassis_x/2), chassis_translate_y - chassis_y/4, -0.1 ]){
+		translate([(chassis_translate_x - chassis_x/2), chassis_translate_y - chassis_y/4, -0.1 ]){
 			sphere(3);
 		}
-		translate([-(chassis_translate_x + chassis_x/2), chassis_translate_y + chassis_y/4, -0.1 ]){
+		translate([(chassis_translate_x - chassis_x/2), chassis_translate_y + chassis_y/4, -0.1 ]){
 			sphere(3);
 		}
 
 		
 
 		base_champfer_thickness=50;
-		base_champfer_offsset_z=2;
-		base_champfer_angle=4.5;
+		base_champfer_offsset_z=3;
+		base_champfer_angle=13;
 		translate([
 			chassis_translate_x + base_translate_x,
 			chassis_translate_y + base_translate_y,
@@ -206,12 +204,12 @@ difference(){
 			(chassis_y/3 + chassis_translate_y + base_translate_y),
 			0
 			])
-		#screw();
+		screw();
 		translate([
 			chassis_x/2 + chassis_translate_x + base_translate_x - 3,
 			-(chassis_y/3 + chassis_translate_y + base_translate_y),
 			0
 			])
-		#screw();
+		screw();
 	}
 } 
