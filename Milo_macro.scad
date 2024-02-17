@@ -1,26 +1,42 @@
+// top: 1, middle: 0, bottom: -1
 render_swap=0;
 
-// make the preview render faster
-preview_enabled=true;
-
-fn_preview=1;
-fs_preview=0.1;
-fa_preview=3;
-
-fn_render=50;
-fs_render=2;
-fa_render=12;
-
-$fn=fn_render;
-$fa=fa_render;
-$fs=fs_render;
-/*
+$fn=50;
+$fa=12;
+$fs=2;
+/* move settings over into this comment block to speed up rendering
 */
+
+// 
+switch_number_x=2;
+switch_number_y=2;
+
+// affects curvature of the switches
+switch_cosine_aplitude=5;
+switch_cosine_freq=25;
+switch_cosine_phase=20;
 
 switch_spacing=6.2;
 switch_width=13.8;
-switch_number_x=3;
-switch_number_y=1;
+
+chassis_x=23*switch_number_x;
+chassis_y=22*switch_number_y;
+chassis_translate_x=5;
+chassis_translate_y=1;
+rounding=4;
+
+base_thickness=16;
+base_outer_wall_thickness=5;
+wrap_top_layers_height=6.3;
+
+// additions to the base (bottom part)
+base_wall_thickness_addition_x=4;
+base_wall_thickness_addition_y=0;
+// combind wall thickness, and translation to get empty space for the top or bottom
+base_translate_x=-2;
+base_translate_y=0;
+
+top_edge_screw_offset=1;
 
 module switch(){
 	translate([0,0,1.2])
@@ -52,12 +68,12 @@ module socket(){
 			rail_depth=3;
 			// columns
 			translate([-7,-translate_y,0])
-			cube([1.3,40,rail_depth], center=true);
+			cube([1.3,45,rail_depth], center=true);
 			// rows 
 			translate([-translate_x,9,0])
 			cube([21,1.3,rail_depth], center=true);
-			translate([9.5,9,0])
-			cube ([1.3,9.5,rail_depth], center=true);
+			translate([9.5,8.5,0])
+			cube ([1.3,11,rail_depth], center=true);
 			translate([6.75,4,0])
 			cube([1.3,11,rail_depth], center=true);
 			// diode for the row
@@ -86,6 +102,44 @@ module socket(){
 		sphere(0.75);
 	}
 }
+
+module pro_micro(distanceFromPCB=0)
+{
+  /*
+	Module originally by: Hauke Thorenz <htho@thorenz.net>
+    Module from:
+	https://github.com/htho/scadlib-electronic-components/blob/5a9610a1a8bb7f51295cfab7b836a92d282b66b0/modules/arduino_compatible/sparkfun/pro_micro.scad#L49
+	Licence: cc-by-sa-4.0
+	http://creativecommons.org/licenses/by-sa/4.0/
+
+	Edited to center on board center.
+  */
+
+  pcb_width = 17.78;
+  pcb_depth = 33.02;
+  pcb_height = 1.6; //guessed
+
+
+  usb_depth = 2.85+2.15;
+  usb_width = 2*3.9;
+  usb_height = 2*1.27;
+  usb_center_x = 0; //usb_width/2;
+  usb_center_y = -2.15/2;
+
+  usb_pos_x = 0;//8.89/2;
+  usb_pos_y = 31.75/2;
+  usb_pos_z = (pcb_height/2) + (usb_height/2);
+
+  connector0_x = (pcb_width/2) - 1.27;
+  connector0_y = (pcb_depth/2) - (1.27 + 11*2.54);
+
+ translate([0,0,distanceFromPCB]) //translate to the given distance
+ rotate([0,0,0]){ //rotating it so the orientation fits the Fritzing part
+      cube([pcb_width, pcb_depth, pcb_height], true); //PCB
+      translate([usb_pos_x,usb_pos_y,usb_pos_z]) translate([usb_center_x,usb_center_y,0]) cube([usb_width, usb_depth+1, usb_height], true); //USB
+  }
+}
+
 module rounded_cube(size, radius) {
     hull() {
         for (x=[-1,1], y=[-1,1], z=[-1,1]) {
@@ -96,7 +150,7 @@ module rounded_cube(size, radius) {
 }
 module screw(){
 	translate([0,0,7])
-	cylinder(h=4.5 , d1=4, d2=2, center=true);
+	cylinder(h=4.5 , d1=3.5, d2=2, center=true);
 	translate([0,0,0])
 	cylinder(h=9.5 , d=4, center=true);
 	translate([0,0,-6.5])
@@ -112,22 +166,6 @@ module top_clip(){
 		cube([10,10,2],center=true);
 	}
 }
-
-
-chassis_x=50;
-chassis_y=50;
-chassis_translate_x=6;
-chassis_translate_y=1;
-rounding=4;
-
-base_thickness=14;
-base_outer_wall_thickness=5;
-wrap_top_layers_height=6.3;
-
-base_wall_thickness_addition_x=4;
-base_wall_thickness_addition_y=0;
-base_translate_x=-2;
-base_translate_y=0;
 
 difference(){
 	if (render_swap==0) {
@@ -147,16 +185,24 @@ difference(){
 	}
 	if (0<=render_swap){
 		// switch and socket placement to be cut out from top 2 chassis models
-			for(j=[-0.5:0.5]){
-				for(i=[-0.5:0.5]){
-					translate ([i*20+5*cos(20*PI*j),j*20,0]){
+			for(j=[-(switch_number_y-1)/2:(switch_number_y/2)]){
+				for(i=[-(switch_number_x-1)/2:(switch_number_x/2)]){
+					translate ([
+						i*20+switch_cosine_aplitude*cos(switch_cosine_freq*PI*j + switch_cosine_phase),
+						j*20,
+						0]){
 					rotate([0,0,90]){
-						socket();
 						switch();
+						if (0==render_swap){
+							socket();
+						}
 					}
 					}
 				}
 		}
+		// additonal thick channel for row cables
+			translate([0,(chassis_y/2) -3,-4.15])
+			cube([chassis_x,3,3], center=true);
 	}
 	if (render_swap==-1){
 		translate([
@@ -182,11 +228,9 @@ difference(){
 			sphere(3);
 		}
 
-		
-
 		base_champfer_thickness=50;
-		base_champfer_offsset_z=3;
-		base_champfer_angle=13;
+		base_champfer_offsset_z=5;
+		base_champfer_angle=6;
 		translate([
 			chassis_translate_x + base_translate_x,
 			chassis_translate_y + base_translate_y,
@@ -198,22 +242,30 @@ difference(){
 				chassis_y + base_outer_wall_thickness + base_wall_thickness_addition_y + 20,
 				base_champfer_thickness
 			], center=true);
+		pro_micro_length=33.6;
+		rotate([0,base_champfer_angle,0])
+		translate([(chassis_x/2)-pro_micro_length/2+chassis_translate_x+3,0,-(base_thickness+wrap_top_layers_height-13)]){
+			translate([0,0,2])
+			#cube([pro_micro_length,18.2,5], center=true);
+			translate([-3,0,4])
+			#cube([pro_micro_length,18.2,8], center=true);
+			rotate([0,0,-90])
+			#pro_micro(0);
+		}
 	}
 	// parts to slice out of all 3 models
-	if(preview_enabled){$fn=fn_preview;$fa=fa_preview;$fs=fs_preview;}
-	else{$fn=fn_render;$fa=fa_render;$fs=fs_render;}
 	translate([0,0,-6.3]){
 		translate([
-			chassis_x/2 + chassis_translate_x + base_translate_x - 3,
-			(chassis_y/3 + chassis_translate_y + base_translate_y),
+			chassis_x/2 + chassis_translate_x + base_translate_x - top_edge_screw_offset,
+			(chassis_y/4 + chassis_translate_y + base_translate_y),
 			0
 			])
-		screw();
+		#screw();
 		translate([
-			chassis_x/2 + chassis_translate_x + base_translate_x - 3,
-			-(chassis_y/3 + chassis_translate_y + base_translate_y),
+			chassis_x/2 + chassis_translate_x + base_translate_x - top_edge_screw_offset,
+			-(chassis_y/4 + chassis_translate_y + base_translate_y),
 			0
 			])
-		screw();
+		#screw();
 	}
 } 
