@@ -5,6 +5,10 @@ fn_preview=1;
 fs_preview=0.1;
 fa_preview=3;
 
+fn_render=50;
+fs_render=2;
+fa_render=12;
+
 switch_spacing=6.2;
 switch_width=13.8;
 switch_number_x=3;
@@ -56,7 +60,7 @@ module socket(){
 					cube([0.5,2,5.5], center=true);
 				}
 			if($preview){$fn=fn_preview;$fa=fa_preview;$fs=fs_preview;}
-			else{$fn=30;}
+			else{$fn=fn_render;$fa=fa_render;$fs=fs_render;}
 			translate([-socket_length/2+0.7+1.65,-0.35,2.1])
 			cylinder(h=6, r=1.65, center=true);
 			translate([socket_length/2-0.8-1.55,2.3,2.1])
@@ -69,7 +73,7 @@ module socket(){
 			cylinder(h=2.5, r=2.3, center=true);
 		}
 		if($preview){$fn=fn_preview;$fa=fa_preview;$fs=fs_preview;}
-		else{$fn=50;}
+		else{$fn=fn_render;$fa=fa_render;$fs=fs_render;}
 		translate([0,-6.75,-(socket_plug_height-0.25)])
 		scale([2,1,1])
 		sphere(0.75);
@@ -93,10 +97,10 @@ module screw(){
 	cylinder(h=15 , d=3.4, center=true);
 }
 
-chassis_x=110;
-chassis_y=100;
-chassis_translate_x=2;
-chassis_translate_y=0;
+chassis_x=43;
+chassis_y=43;
+chassis_translate_x=14;
+chassis_translate_y=10;
 /*
 */
 difference(){
@@ -109,8 +113,8 @@ difference(){
 			cube([chassis_x,chassis_y,6], center=true);
 	}
 	if (0<=render_swap){
-			for(j=[-2:2]){
-				for(i=[-2:2])
+			for(j=[-0:1]){
+				for(i=[-0:1])
 				{
 					/*
 					*/
@@ -144,13 +148,9 @@ difference(){
 		
 	}
 	if($preview){$fn=fn_preview;$fa=fa_preview;$fs=fs_preview;}
-	else{$fn=30;}
+	else{$fn=fn_render;$fa=fa_render;$fs=fs_render;}
 	translate([0,0,-5]){
-		translate([-45,0,0])
-		#screw();
-		translate([50,40,0])
-		#screw();
-		translate([50,-40,0])
+		translate([13,10,0])
 		#screw();
 	}
 }
