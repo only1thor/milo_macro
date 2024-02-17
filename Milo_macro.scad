@@ -95,10 +95,14 @@ module rounded_cube(size, radius) {
     }
 }
 module screw(){
-	translate([0,0,-7.5])
+	translate([0,0,7])
+	cylinder(h=4.5 , d1=4, d2=2, center=true);
+	translate([0,0,0])
+	cylinder(h=9.5 , d=4, center=true);
+	translate([0,0,-6.5])
 	cylinder(h=4 , d1=8, d2=3.8, center=true);
-	translate([0,0,2])
-	cylinder(h=15 , d=4, center=true);
+	translate([0,0,-11])
+	cylinder(h=5 , d=8, center=true);
 }
 
 module top_clip(){
