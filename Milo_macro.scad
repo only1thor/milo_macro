@@ -119,9 +119,10 @@ difference(){
 					/*
 					*/
 					translate ([i*20+5*cos(20*PI*j),j*20,0]){
-					rotate([0,0,90])
+					rotate([0,0,90]){
 						socket();
 						switch();
+					}
 					}
 				}
 		}
