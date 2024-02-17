@@ -125,7 +125,7 @@ difference(){
 	if (render_swap==-1){
 		base_thickness=12.2;
 		base_outer_wall_thickness=3;
-		wrap_top_layers_height=2.8+3.5;
+		wrap_top_layers_height=6.3;
 		translate([
 			chassis_translate_x,
 			chassis_translate_y,
@@ -138,13 +138,19 @@ difference(){
 			], 3);
 	}
 	if (render_swap==-1){
-		translate([chassis_translate_x,chassis_translate_y,1.7])
-			cube([chassis_x,chassis_y,6], center=true);
-		translate([chassis_translate_x, chassis_translate_y, -3.05])
-			cube(size=[chassis_x, chassis_y, 3.5], center=true);
+		// size of both switch_plate, and socket_plate + 0.5mm tolerance
+		translate([chassis_translate_x, chassis_translate_y, -0.1 ])
+			cube([chassis_x+ 0.5, chassis_y+ 0.5, 9.51], center=true);
+		
 	}
 	if($preview){$fn=fn_preview;$fa=fa_preview;$fs=fs_preview;}
 	else{$fn=30;}
-	translate([-30,10,-4.5])
-	#screw();
+	translate([0,0,-5]){
+		translate([-45,0,0])
+		#screw();
+		translate([50,40,0])
+		#screw();
+		translate([50,-40,0])
+		#screw();
+	}
 }
