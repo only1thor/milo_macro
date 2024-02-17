@@ -1,8 +1,7 @@
 # A macro pad for milo
 
-progress photos for current commit (85b3c34a4061e12515988fe90f9fa1a51c388647)
+progress photos for current commit (4c380ad5b925c030d7abf18c7d285c8a3c34e87d)
 
-| Top view | Bottom view |
+| Top plate view | Bottom plate view |
 |----------|-------------|
-| ![top view](top_view.jpeg)| ![bottom view](bottom_view.jpeg) |
-| ![top view rendered](top.png) | ![bottom view rendered](bottom.png) |
+| ![top plate view rendered](top_plate.png) | ![bottom plate view rendered](bottom_plate.png) |
