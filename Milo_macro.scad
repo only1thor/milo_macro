@@ -115,7 +115,7 @@ module pro_micro(distanceFromPCB=0)
 	Edited to center on board center.
   */
 
-  pcb_width = 18.4;
+  pcb_width = 18.6;
   pcb_depth = 33.6;
   pcb_height = 1.6; //guessed
 
@@ -243,22 +243,26 @@ difference(){
 				base_champfer_thickness
 			], center=true);
 		pro_micro_length=33.6;
-		pro_micro_width=18.4;
+		pro_micro_width=18.6;
 		rotate([0,0,0])
 		translate([
 			(chassis_x/2)-pro_micro_length/2+chassis_translate_x+1.6,
 			0,
-			-(base_thickness+wrap_top_layers_height-16)]){
+			-(base_thickness+wrap_top_layers_height-15)]){
 				// TODO: cut channel beneath the pro micro, angeled like the base.
 			translate([0,0,2])
-			#cube([pro_micro_length,pro_micro_width,5], center=true);
+			cube([pro_micro_length,pro_micro_width,5], center=true);
 			translate([-3,0,4])
-			#cube([pro_micro_length,pro_micro_width,8], center=true);
+			cube([pro_micro_length,pro_micro_width,8], center=true);
 			rotate([0,0,-90])
-			#pro_micro(0);
+			pro_micro(0);
 			translate([chassis_translate_x+4,chassis_translate_y,-1])
-			#cube([5,chassis_y,7],center=true);
+			#cube([3,chassis_y,7],center=true);
 		}
+			translate([chassis_translate_x+chassis_x/8, chassis_translate_y+chassis_y/4, -7/1.5])
+			cube([chassis_x/2,chassis_x/4,7],center=true);
+			translate([chassis_translate_x+chassis_x/8, -(chassis_translate_y+chassis_y/4), -7/1.5])
+			cube([chassis_x/2,chassis_x/4,7],center=true);
 	}
 	// parts to slice out of all 3 models
 	translate([0,0,-6.3]){
