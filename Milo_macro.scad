@@ -8,21 +8,21 @@ $fs=2;
 */
 
 // 
-switch_number_x=5;
-switch_number_y=5;
+switch_number_x=3;
+switch_number_y=3;
 
 // affects curvature of the switches
-switch_cosine_aplitude=5;
+switch_cosine_aplitude=2;
 switch_cosine_freq=25;
-switch_cosine_phase=20;
+switch_cosine_phase=3;
 
 switch_spacing=6.2;
 switch_width=13.8;
 
 chassis_x=23*switch_number_x;
 chassis_y=22*switch_number_y;
-chassis_translate_x=4;
-chassis_translate_y=1;
+chassis_translate_x=5;
+chassis_translate_y=0;
 rounding=4;
 
 base_thickness=16;
@@ -70,15 +70,16 @@ module socket(){
 			translate([-7,-translate_y,0])
 			cube([1.3,45,rail_depth], center=true);
 			// rows 
-			translate([-translate_x,9,0])
-			cube([21,1.3,rail_depth], center=true);
-			translate([9.5,8.5,0])
+			translate([-translate_x+0.75,11,0])
+			cube([20,1.3,rail_depth], center=true);
+			translate([10,8.5,0])
 			cube ([1.3,11,rail_depth], center=true);
-			translate([6.75,4,0])
-			cube([1.3,11,rail_depth], center=true);
 			// diode for the row
-			translate([-2,9,0.25])
-				rotate([0,90,0]){
+			translate([4.5,+6.5,])
+			rotate([0,0,45])
+			cube([1.3,11,rail_depth], center=true);
+			translate([+4,7,0.25])
+				rotate([0,90,-45]){
 					cylinder(h=5.5, d=2.6, center=true);
 					translate([1,0,0])
 					cube([0.5,2.5,5.5], center=true);
@@ -201,7 +202,7 @@ difference(){
 				}
 		}
 		// additonal thick channel for row cables
-			translate([chassis_translate_x,(chassis_y/2) -3,-4.15])
+			translate([chassis_translate_x,-(chassis_y/2) +3,-4.15])
 			cube([chassis_x,3,3], center=true);
 		// additonal thick channel at the top of the middle section for cable management
 			translate([chassis_translate_x + (chassis_x/2) - top_edge_screw_offset -6,
@@ -234,8 +235,8 @@ difference(){
 		}
 
 		base_champfer_thickness=50;
-		base_champfer_offsset_z=6;
-		base_champfer_angle=4;
+		base_champfer_offsset_z=5;
+		base_champfer_angle=6;
 		translate([
 			chassis_translate_x + base_translate_x,
 			chassis_translate_y + base_translate_y,
