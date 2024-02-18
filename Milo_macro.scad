@@ -8,8 +8,8 @@ $fs=2;
 */
 
 // 
-switch_number_x=2;
-switch_number_y=2;
+switch_number_x=5;
+switch_number_y=5;
 
 // affects curvature of the switches
 switch_cosine_aplitude=5;
@@ -21,7 +21,7 @@ switch_width=13.8;
 
 chassis_x=23*switch_number_x;
 chassis_y=22*switch_number_y;
-chassis_translate_x=5;
+chassis_translate_x=4;
 chassis_translate_y=1;
 rounding=4;
 
@@ -62,7 +62,7 @@ module socket(){
 			translate([-(socket_length+2)/2,-0.4,0])
 			cube([4,1.6,socket_height],center=true);
 			translate([(socket_length+2)/2,(socket_width_2+0.7)/2,0])
-			cube([4,1.6,socket_height],center=true);
+			cube([3,1.6,socket_height],center=true);
 
 			// wire rails
 			rail_depth=3;
@@ -203,6 +203,11 @@ difference(){
 		// additonal thick channel for row cables
 			translate([chassis_translate_x,(chassis_y/2) -3,-4.15])
 			cube([chassis_x,3,3], center=true);
+		// additonal thick channel at the top of the middle section for cable management
+			translate([chassis_translate_x + (chassis_x/2) - top_edge_screw_offset -6,
+			chassis_translate_y,
+			-4.15])
+			cube([3.5,chassis_y,3], center=true);
 	}
 	if (render_swap==-1){
 		translate([
@@ -230,7 +235,7 @@ difference(){
 
 		base_champfer_thickness=50;
 		base_champfer_offsset_z=6;
-		base_champfer_angle=12;
+		base_champfer_angle=4;
 		translate([
 			chassis_translate_x + base_translate_x,
 			chassis_translate_y + base_translate_y,
@@ -248,21 +253,21 @@ difference(){
 		translate([
 			(chassis_x/2)-pro_micro_length/2+chassis_translate_x+1.6,
 			0,
-			-(base_thickness+wrap_top_layers_height-15)]){
+			-(base_thickness+wrap_top_layers_height-12)]){
 				// TODO: cut channel beneath the pro micro, angeled like the base.
 			translate([0,0,2])
 			cube([pro_micro_length,pro_micro_width,5], center=true);
-			translate([-3,0,4])
-			cube([pro_micro_length,pro_micro_width,8], center=true);
+			translate([-1,0,8])
+			cube([pro_micro_length,pro_micro_width+4,9], center=true);
 			rotate([0,0,-90])
 			pro_micro(0);
-			translate([chassis_translate_x+4,chassis_translate_y,-1])
-			#cube([3,chassis_y,7],center=true);
+			translate([chassis_translate_x+3,chassis_translate_y,+2])
+			cube([4,chassis_y,9],center=true);
 		}
-			translate([chassis_translate_x+chassis_x/8, chassis_translate_y+chassis_y/4, -7/1.5])
-			cube([chassis_x/2,chassis_x/4,7],center=true);
-			translate([chassis_translate_x+chassis_x/8, -(chassis_translate_y+chassis_y/4), -7/1.5])
-			cube([chassis_x/2,chassis_x/4,7],center=true);
+			translate([chassis_translate_x + chassis_x/3, pro_micro_width/2 + 1, -8])
+			cube([pro_micro_length/1.5,2.9,7],center=true);
+			translate([chassis_translate_x + chassis_x/3, -pro_micro_width/2 - 1, -8])
+			cube([pro_micro_length/1.5,2.9,7],center=true);
 	}
 	// parts to slice out of all 3 models
 	translate([0,0,-6.3]){
