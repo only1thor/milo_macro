@@ -115,14 +115,14 @@ module pro_micro(distanceFromPCB=0)
 	Edited to center on board center.
   */
 
-  pcb_width = 17.78;
-  pcb_depth = 33.02;
+  pcb_width = 18.4;
+  pcb_depth = 33.6;
   pcb_height = 1.6; //guessed
 
 
   usb_depth = 2.85+2.15;
   usb_width = 2*3.9;
-  usb_height = 2*1.27;
+  usb_height = 2*1.6;
   usb_center_x = 0; //usb_width/2;
   usb_center_y = -2.15/2;
 
@@ -201,7 +201,7 @@ difference(){
 				}
 		}
 		// additonal thick channel for row cables
-			translate([0,(chassis_y/2) -3,-4.15])
+			translate([chassis_translate_x,(chassis_y/2) -3,-4.15])
 			cube([chassis_x,3,3], center=true);
 	}
 	if (render_swap==-1){
@@ -229,8 +229,8 @@ difference(){
 		}
 
 		base_champfer_thickness=50;
-		base_champfer_offsset_z=5;
-		base_champfer_angle=6;
+		base_champfer_offsset_z=6;
+		base_champfer_angle=12;
 		translate([
 			chassis_translate_x + base_translate_x,
 			chassis_translate_y + base_translate_y,
@@ -243,14 +243,21 @@ difference(){
 				base_champfer_thickness
 			], center=true);
 		pro_micro_length=33.6;
-		rotate([0,base_champfer_angle,0])
-		translate([(chassis_x/2)-pro_micro_length/2+chassis_translate_x+3,0,-(base_thickness+wrap_top_layers_height-13)]){
+		pro_micro_width=18.4;
+		rotate([0,0,0])
+		translate([
+			(chassis_x/2)-pro_micro_length/2+chassis_translate_x+1.6,
+			0,
+			-(base_thickness+wrap_top_layers_height-16)]){
+				// TODO: cut channel beneath the pro micro, angeled like the base.
 			translate([0,0,2])
-			#cube([pro_micro_length,18.2,5], center=true);
+			#cube([pro_micro_length,pro_micro_width,5], center=true);
 			translate([-3,0,4])
-			#cube([pro_micro_length,18.2,8], center=true);
+			#cube([pro_micro_length,pro_micro_width,8], center=true);
 			rotate([0,0,-90])
 			#pro_micro(0);
+			translate([chassis_translate_x+4,chassis_translate_y,-1])
+			#cube([5,chassis_y,7],center=true);
 		}
 	}
 	// parts to slice out of all 3 models
