@@ -272,6 +272,12 @@ difference(){
 			translate([chassis_translate_x -3, -(chassis_y/3.5 +pro_micro_width/16),0]) // working on this placement
 			rotate([0,base_champfer_angle,0])
 			#cube([chassis_x/1.1,chassis_y/2-pro_micro_width,base_thickness],center=true);
+
+			// TODO: adde reset button
+
+			// TODO: add rubber feet recesses (11mm diameter, max 5mm deep)
+			// note: consider adding 11mm ish to the bottom of the base, 
+			// to fit the rubber feet, without ending up cutting though to the middle section.
 	}
 	// parts to slice out of all 3 models
 	translate([0,0,-6.75]){
