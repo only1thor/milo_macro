@@ -30,10 +30,10 @@ base_outer_wall_thickness=5;
 wrap_top_layers_height=6.3;
 
 // additions to the base (bottom part)
-base_wall_thickness_addition_x=4;
+base_wall_thickness_addition_x=5;
 base_wall_thickness_addition_y=0;
 // combind wall thickness, and translation to get empty space for the top or bottom
-base_translate_x=+2;
+base_translate_x=+1;
 base_translate_y=0;
 
 top_edge_screw_offset=3;
@@ -72,8 +72,8 @@ module socket(){
 			// rows 
 			translate([-translate_x+0.75,11,0])
 			cube([20,1.3,rail_depth], center=true);
-			translate([10,8.5,0])
-			cube ([1.3,11,rail_depth], center=true);
+			translate([10,10,0])
+			#cube ([1.3,14,rail_depth], center=true);
 			// diode for the row
 			translate([4.5,+6.5,])
 			rotate([0,0,45])
@@ -202,8 +202,8 @@ difference(){
 				}
 		}
 		// additonal thick channel for row cables
-			translate([chassis_translate_x,-(chassis_y/2) +3,-4.15])
-			cube([chassis_x,3,3], center=true);
+			translate([chassis_translate_x,-(chassis_y/2) +4,-4.15])
+			cube([chassis_x,5,3], center=true);
 		// additonal thick channel at the top of the middle section for cable management
 			translate([chassis_translate_x + (chassis_x/2) - top_edge_screw_offset -6,
 			chassis_translate_y,
@@ -233,10 +233,11 @@ difference(){
 		translate([(chassis_translate_x - chassis_x/2), chassis_translate_y + chassis_y/4, -0.1 ]){
 			sphere(3);
 		}
-
+		// base chamfer settings
+		// adjustment is unfortunately not (entirely) parametric.
 		base_champfer_thickness=50;
 		base_champfer_offsset_z=5;
-		base_champfer_angle=6;
+		base_champfer_angle=5;
 		translate([
 			chassis_translate_x + base_translate_x,
 			chassis_translate_y + base_translate_y,
@@ -255,7 +256,6 @@ difference(){
 			(chassis_x/2)-pro_micro_length/2+chassis_translate_x+1.6,
 			0,
 			-(base_thickness+wrap_top_layers_height-12)]){
-				// TODO: cut channel beneath the pro micro, angeled like the base.
 			translate([0,0,2])
 			cube([pro_micro_length,pro_micro_width,5], center=true);
 			translate([-1,0,8])
@@ -265,17 +265,16 @@ difference(){
 			translate([chassis_translate_x-2,chassis_translate_y,+2])
 			cube([12,chassis_y,9],center=true);
 		}
-			translate([chassis_translate_x + chassis_x/8, chassis_y/4 +pro_micro_width/16, 0])
+			cable_management_cavity=[chassis_x/1.1,chassis_y/2-pro_micro_width,base_thickness];
+			translate([chassis_translate_x -3, chassis_y/3.5 +pro_micro_width/16,0])
 			rotate([0,base_champfer_angle,0])
-			#cube([chassis_x/2,chassis_y/2-pro_micro_width,base_thickness],center=true);
-			translate([chassis_translate_x + chassis_x/8, -(chassis_y/4 +pro_micro_width/16), 0])
+			#cube(cable_management_cavity,center=true);
+			translate([chassis_translate_x -3, -(chassis_y/3.5 +pro_micro_width/16),0]) // working on this placement
 			rotate([0,base_champfer_angle,0])
-			#cube([chassis_x/2,chassis_y/2-pro_micro_width,base_thickness],center=true);
-			translate([chassis_translate_x + chassis_x/3, -pro_micro_width/2 - 1, -8])
-			cube([pro_micro_length/1.5,2.9,7],center=true);
+			#cube([chassis_x/1.1,chassis_y/2-pro_micro_width,base_thickness],center=true);
 	}
 	// parts to slice out of all 3 models
-	translate([0,0,-6.3]){
+	translate([0,0,-6.75]){
 		translate([
 			chassis_x/2 + chassis_translate_x - top_edge_screw_offset,
 			(chassis_y/4 + chassis_translate_y + base_translate_y),
