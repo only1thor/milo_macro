@@ -8,18 +8,18 @@ $fs=2;
 */
 
 // 
-switch_number_x=3;
-switch_number_y=3;
+switch_number_x=5;
+switch_number_y=5;
 
 // affects curvature of the switches
-switch_cosine_aplitude=2;
+switch_cosine_aplitude=6;
 switch_cosine_freq=25;
-switch_cosine_phase=3;
+switch_cosine_phase=12;
 
 switch_spacing=6.2;
 switch_width=13.8;
 
-chassis_x=23*switch_number_x;
+chassis_x=23.7*switch_number_x;
 chassis_y=22*switch_number_y;
 chassis_translate_x=5;
 chassis_translate_y=0;
@@ -33,10 +33,10 @@ wrap_top_layers_height=6.3;
 base_wall_thickness_addition_x=4;
 base_wall_thickness_addition_y=0;
 // combind wall thickness, and translation to get empty space for the top or bottom
-base_translate_x=-2;
+base_translate_x=+2;
 base_translate_y=0;
 
-top_edge_screw_offset=1;
+top_edge_screw_offset=3;
 
 module switch(){
 	translate([0,0,1.2])
@@ -262,24 +262,28 @@ difference(){
 			cube([pro_micro_length,pro_micro_width+4,9], center=true);
 			rotate([0,0,-90])
 			pro_micro(0);
-			translate([chassis_translate_x+3,chassis_translate_y,+2])
-			cube([4,chassis_y,9],center=true);
+			translate([chassis_translate_x-2,chassis_translate_y,+2])
+			cube([12,chassis_y,9],center=true);
 		}
-			translate([chassis_translate_x + chassis_x/3, pro_micro_width/2 + 1, -8])
-			cube([pro_micro_length/1.5,2.9,7],center=true);
+			translate([chassis_translate_x + chassis_x/8, chassis_y/4 +pro_micro_width/16, 0])
+			rotate([0,base_champfer_angle,0])
+			#cube([chassis_x/2,chassis_y/2-pro_micro_width,base_thickness],center=true);
+			translate([chassis_translate_x + chassis_x/8, -(chassis_y/4 +pro_micro_width/16), 0])
+			rotate([0,base_champfer_angle,0])
+			#cube([chassis_x/2,chassis_y/2-pro_micro_width,base_thickness],center=true);
 			translate([chassis_translate_x + chassis_x/3, -pro_micro_width/2 - 1, -8])
 			cube([pro_micro_length/1.5,2.9,7],center=true);
 	}
 	// parts to slice out of all 3 models
 	translate([0,0,-6.3]){
 		translate([
-			chassis_x/2 + chassis_translate_x + base_translate_x - top_edge_screw_offset,
+			chassis_x/2 + chassis_translate_x - top_edge_screw_offset,
 			(chassis_y/4 + chassis_translate_y + base_translate_y),
 			0
 			])
 		#screw();
 		translate([
-			chassis_x/2 + chassis_translate_x + base_translate_x - top_edge_screw_offset,
+			chassis_x/2 + chassis_translate_x - top_edge_screw_offset,
 			-(chassis_y/4 + chassis_translate_y + base_translate_y),
 			0
 			])
