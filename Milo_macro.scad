@@ -168,6 +168,19 @@ module top_clip(){
 	}
 }
 
+module reset_button(extrusion_cut = 7,hole_depth = 2.5){
+      translate([0,extrusion_cut/2,0])
+      cube([6.5,4+extrusion_cut,4],center=true);
+      translate([3.75,0.5+extrusion_cut/2,3.25])
+      cube([1,3+extrusion_cut,4.5],center=true);
+      translate([-3.75,0.5+extrusion_cut/2,3.25])
+      cube([1,3+extrusion_cut,4.5],center=true);
+      translate([0,extrusion_cut/2,-1.5])
+      cube([3.5,4+extrusion_cut,4],center=true);
+      translate([0,0,-(4+hole_depth/2)])
+      cylinder(h=4+hole_depth,d=3,center=true);
+}
+
 difference(){
 	if (render_swap==0) {
 		translate([chassis_translate_x, chassis_translate_y, -3.05])
@@ -253,7 +266,7 @@ difference(){
 		pro_micro_width=18.6;
 		rotate([0,0,0])
 		translate([
-			(chassis_x/2)-pro_micro_length/2+chassis_translate_x+1.6,
+			(chassis_x/2)-pro_micro_length/2+chassis_translate_x+4,
 			0,
 			-(base_thickness+wrap_top_layers_height-12)]){
 			translate([0,0,2])
@@ -263,17 +276,22 @@ difference(){
 			rotate([0,0,-90])
 			pro_micro(0);
 			translate([chassis_translate_x-2,chassis_translate_y,+2])
+			translate([-3, 0, 0])
+			// this should be at max 1mm from the screws. but i don't feel like calculating that.
 			cube([12,chassis_y,9],center=true);
 		}
 			cable_management_cavity=[chassis_x/1.1,chassis_y/2-pro_micro_width,base_thickness];
 			translate([chassis_translate_x -3, chassis_y/3.5 +pro_micro_width/16,0])
 			rotate([0,base_champfer_angle,0])
-			#cube(cable_management_cavity,center=true);
+			cube(cable_management_cavity,center=true);
 			translate([chassis_translate_x -3, -(chassis_y/3.5 +pro_micro_width/16),0]) // working on this placement
 			rotate([0,base_champfer_angle,0])
-			#cube([chassis_x/1.1,chassis_y/2-pro_micro_width,base_thickness],center=true);
+			cube([chassis_x/1.1,chassis_y/2-pro_micro_width,base_thickness],center=true);
 
 			// TODO: adde reset button
+			translate([chassis_x/2 + chassis_translate_x - 2, -18,-9])
+			rotate([0,0,90])
+			reset_button(7,1);
 
 			// TODO: add rubber feet recesses (11mm diameter, max 5mm deep)
 			// note: consider adding 11mm ish to the bottom of the base, 
