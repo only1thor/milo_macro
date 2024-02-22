@@ -123,12 +123,12 @@ module pro_micro(distanceFromPCB=0)
 
   usb_depth = 2.85+2.15;
   usb_width = 2*3.9;
-  usb_height = 2*1.6;
+  usb_height = 2*1.8;
   usb_center_x = 0; //usb_width/2;
   usb_center_y = -2.15/2;
 
   usb_pos_x = 0;//8.89/2;
-  usb_pos_y = 31.75/2;
+  usb_pos_y = 33.75/2;
   usb_pos_z = (pcb_height/2) + (usb_height/2);
 
   connector0_x = (pcb_width/2) - 1.27;
