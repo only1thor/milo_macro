@@ -12,7 +12,7 @@ switch_number_x=5;
 switch_number_y=5;
 
 // affects curvature of the switches
-switch_cosine_aplitude=6;
+switch_cosine_amplitude=6;
 switch_cosine_freq=25;
 switch_cosine_phase=12;
 
@@ -73,7 +73,7 @@ module socket(){
 			translate([-translate_x+0.75,11,0])
 			cube([20,1.3,rail_depth], center=true);
 			translate([10,10,0])
-			#cube ([1.3,14,rail_depth], center=true);
+			cube ([1.3,14,rail_depth], center=true);
 			// diode for the row
 			translate([4.5,+6.5,])
 			rotate([0,0,45])
@@ -202,7 +202,7 @@ difference(){
 			for(j=[-(switch_number_y-1)/2:(switch_number_y/2)]){
 				for(i=[-(switch_number_x-1)/2:(switch_number_x/2)]){
 					translate ([
-						i*20+switch_cosine_aplitude*cos(switch_cosine_freq*PI*j + switch_cosine_phase),
+						i*20+switch_cosine_amplitude*cos(switch_cosine_freq*PI*j + switch_cosine_phase),
 						j*20,
 						0]){
 					rotate([0,0,90]){
@@ -281,10 +281,10 @@ difference(){
 			cube([12,chassis_y,9],center=true);
 		}
 			cable_management_cavity=[chassis_x/1.1,chassis_y/2-pro_micro_width,base_thickness];
-			translate([chassis_translate_x -3, chassis_y/3.5 +pro_micro_width/16,0])
+			translate([chassis_translate_x -3, chassis_y/3.5 +pro_micro_width/16,-1])
 			rotate([0,base_champfer_angle,0])
 			cube(cable_management_cavity,center=true);
-			translate([chassis_translate_x -3, -(chassis_y/3.5 +pro_micro_width/16),0]) // working on this placement
+			translate([chassis_translate_x -3, -(chassis_y/3.5 +pro_micro_width/16),-1])
 			rotate([0,base_champfer_angle,0])
 			cube([chassis_x/1.1,chassis_y/2-pro_micro_width,base_thickness],center=true);
 
@@ -304,12 +304,12 @@ difference(){
 			(chassis_y/4 + chassis_translate_y + base_translate_y),
 			0
 			])
-		#screw();
+		screw();
 		translate([
 			chassis_x/2 + chassis_translate_x - top_edge_screw_offset,
 			-(chassis_y/4 + chassis_translate_y + base_translate_y),
 			0
 			])
-		#screw();
+		screw();
 	}
 } 
